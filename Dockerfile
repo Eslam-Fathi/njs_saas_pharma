@@ -29,11 +29,10 @@ RUN apk add --no-cache openssl
 COPY package*.json ./
 COPY prisma ./prisma/
 
-# Install only production dependencies to keep the image small
-RUN npm ci --omit=dev
-
-# Generate Prisma Client for the production environment
-RUN npx prisma generate
+# Instead of installing production dependencies again, we copy the node_modules
+# from the builder stage. This ensures the Prisma Client generated in Stage 1
+# is perfectly preserved and available without needing to run generate again!
+COPY --from=builder /usr/src/app/node_modules ./node_modules
 
 # Copy the compiled application from the builder stage
 COPY --from=builder /usr/src/app/dist ./dist
