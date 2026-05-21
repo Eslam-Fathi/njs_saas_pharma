@@ -1,0 +1,50 @@
+### REST Client file for VS Code
+### Install "REST Client" extension to run these directly from the editor.
+
+@baseUrl = http://localhost:3000/v1
+
+### 1. Test the POST /tenants Endpoint (Success Case)
+# This should now return { success: true, data: { ... } }
+POST {{baseUrl}}/tenants
+Content-Type: application/json
+
+{
+  "business_name": "Test Pharmacy",
+  "tenant_slug": "test-pharmacy",
+  "owner_name": "John Doe",
+  "username": "johndoe",
+  "password": "Password123!"
+}
+
+### 2. Test the POST /tenants Endpoint (Validation Error Case)
+# This should return our custom { success: false, error: { code: '...', message: [...] } }
+# It fails because the password is too weak and the slug has invalid characters.
+POST {{baseUrl}}/tenants
+Content-Type: application/json
+
+{
+  "business_name": "Bad Pharmacy",
+  "tenant_slug": "bad_slug!!",
+  "owner_name": "Jane Doe",
+  "username": "jane",
+  "password": "123"
+}
+
+### 3. Test POST /auth/sessions (Login)
+# Replace credentials if needed. Should return { success: true, data: { access_token: "..." } }
+POST {{baseUrl}}/auth/sessions
+Content-Type: application/json
+
+{
+  "username": "johndoe",
+  "password": "Password123!"
+}
+
+### 4. Test GET /tenants/me (Auth Required)
+# Remember to replace the token below with the one returned from the login request!
+GET {{baseUrl}}/tenants/me
+Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
+
+### 5. Test Unauthorized Access
+# Should return { success: false, error: { code: 'Unauthorized', message: 'Unauthorized' } }
+GET {{baseUrl}}/tenants/me
