@@ -17,6 +17,7 @@ import { RegisterTenantDto } from './dto/register-tenant.dto';
 import { Public } from '../common/decorators/public.decorator';
 
 import { Request } from 'express';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 
 interface AuthenticatedRequest extends Request {
   user: {
@@ -27,6 +28,7 @@ interface AuthenticatedRequest extends Request {
   };
 }
 
+@ApiTags('Tenants')
 @Controller('tenants')
 export class TenantsController {
   constructor(private readonly tenantsService: TenantsService) {}

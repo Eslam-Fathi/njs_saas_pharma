@@ -27,6 +27,17 @@ async function bootstrap() {
   // Set the API prefix to v1 matching API Contracts specification
   app.setGlobalPrefix('v1');
 
+  // Swagger API Documentation Setup
+  const { DocumentBuilder, SwaggerModule } = require('@nestjs/swagger');
+  const config = new DocumentBuilder()
+    .setTitle('PharmaGo SaaS API')
+    .setDescription('Multi-tenant Pharmacy Management System API Documentation')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+  const documentFactory = () => SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, documentFactory);
+
   // Enable CORS
   app.enableCors();
 
