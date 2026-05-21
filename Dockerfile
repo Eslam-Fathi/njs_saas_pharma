@@ -37,6 +37,9 @@ COPY --from=builder /usr/src/app/node_modules ./node_modules
 # Copy the compiled application from the builder stage
 COPY --from=builder /usr/src/app/dist ./dist
 
+# Copy the custom generated Prisma Client to where the built code expects it!
+COPY --from=builder /usr/src/app/src/prisma/client ./dist/src/prisma/client
+
 EXPOSE 3000
 
 # Start the application
